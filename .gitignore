@@ -1,0 +1,102 @@
+# -------------------------------------------------------
+# Logs
+# -------------------------------------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# npm pack 결과물
+*.tgz
+
+# -------------------------------------------------------
+# Dependencies / Build outputs
+# -------------------------------------------------------
+node_modules/
+dist/
+dist-ssr/
+
+# Vite & Tool caches
+.vite/
+.vite-*
+.cache/
+.parcel-cache/
+.turbo/
+
+# 임시 파일/폴더
+.tmp/
+.temp/
+
+# -------------------------------------------------------
+# Environment (절대 커밋 금지 / 예시만 허용)
+# -------------------------------------------------------
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example   # 예시 파일은 커밋 허용
+
+# direnv 등 로컬 쉘 환경
+.envrc
+.direnv/
+
+# 인증서/키류 (실수 방지용)
+*.pem
+*.p12
+*.pfx
+*.key
+
+# -------------------------------------------------------
+# Test & Coverage artifacts
+# -------------------------------------------------------
+coverage/
+.nyc_output/
+.jest/
+jest-*.html
+playwright-report/
+test-results/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# -------------------------------------------------------
+# TypeScript / Linters
+# -------------------------------------------------------
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+
+# -------------------------------------------------------
+# Editors / OS junk
+# -------------------------------------------------------
+# VSCode (권장 확장만 예외 허용)
+.vscode/*
+!.vscode/extensions.json
+
+# JetBrains / Windows / macOS
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Vim swap 등
+*.sw?
+*.swo?
+
+# -------------------------------------------------------
+# Storybook (사용 중이면)
+# -------------------------------------------------------
+storybook-static/
+.out/
+
+# -------------------------------------------------------
+# 기타 로컬 설정 파일(예: *.local)
+# -------------------------------------------------------
+*.local
