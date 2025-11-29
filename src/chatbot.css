@@ -1,0 +1,48 @@
+/* 플로팅 위젯 기본 컨테이너 크기 */
+.react-chatbot-kit-chat-container {
+  width: 70vw;   /* 화면 너비의 70% */
+  height: 90vh;  /* 화면 높이의 90% */
+}
+
+/* 내부 전체 확장 */
+.react-chatbot-kit-chat-inner-container {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+/* 메시지 스크롤 영역 */
+.react-chatbot-kit-chat-message-container {
+  height: calc(100% - 120px); /* 헤더/푸터 뺀 나머지 */
+}
+
+/* src/chatbot.css */
+.iconify-avatar {
+  width: 36px;         /* 기본 아바타 컨테이너 크기 */
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 봇 말풍선 → 왼쪽 정렬 */
+.react-chatbot-kit-chat-bot-message {
+  margin-left: 40px;        /* 아바타 공간만큼 띄우기 */
+  margin-right: auto;       /* 왼쪽 고정 */
+  text-align: left;
+  background-color: #e6e6e6; /* 원하면 색상 바꿀 수도 있음 */
+}
+
+/* 유저 말풍선 → 오른쪽 정렬 */
+.react-chatbot-kit-user-chat-message {
+  margin-left: auto;        /* 오른쪽 고정 */
+  margin-right: 20px;
+  text-align: right;
+  background-color: #2f6fad; /* 유저 말풍선 색 (지금 파랑 유지) */
+  color: white;
+}
+
+.react-chatbot-kit-user-chat-message-arrow {
+  border-left: 8px solid #2f6fad; /* 위와 동일한 색상 */
+}
