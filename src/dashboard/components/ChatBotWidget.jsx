@@ -9,7 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-import ChatbotTool from "./ChatbotTool";
+import ChatBotTool from "./ChatBotTool";
 
 export default function ChatBotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +71,7 @@ export default function ChatBotWidget() {
           </Box>
 
           <Box sx={{ flex: 1, minHeight: 0 }}>
-            <ChatbotTool />
+            <ChatBotTool />
           </Box>
         </Paper>
       )}
