@@ -14,7 +14,7 @@ import PageViewsBarChart from "./PageViewsBarChart";
 import SessionsChart from "./SessionsChart";
 import StatCard from "./StatCard";
 import ChatBotWidget from "./ChatBotWidget";
-import ChatbotTool from "./ChatbotTool";
+import ChatBotTool from "./ChatBotTool";
 
 
 // const data = [
@@ -94,7 +94,7 @@ export default function MainGrid() {
         </Grid>
       </Grid> */}
       {/* <ChatBotWidget /> */}
-      <ChatbotTool />
+      <ChatBotTool />
       {/* <Copyright sx={{ my: 4 }} /> */}
     </Box>
   );
