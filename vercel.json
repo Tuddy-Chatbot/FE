@@ -1,8 +1,5 @@
 {
   "rewrites": [
-    {
-      "source": "/chat",
-      "destination": "@backend/chat"
-    }
+    { "source": "/chat", "destination": "http://52.79.139.255:8088/chat" }
   ]
 }
