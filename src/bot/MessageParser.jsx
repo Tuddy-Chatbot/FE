@@ -11,7 +11,7 @@ const MessageParser = ({ children, actions }) => {
     try {
     const res = await api.post('/chat',
       // { userId: "pyohm", query: message },
-      { sessionId: 0, query: message },
+      { sessionId: 0, answer: message },
       { headers: { 'Content-Type': 'application/json' } }
     );
 
