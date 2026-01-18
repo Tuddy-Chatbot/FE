@@ -15,7 +15,11 @@ export default defineConfig(({ mode }) => {
           target: env.VITE_API_BASE,
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => path.replace(/^\/chat/, "/api/chat"),
+        },
+        "^/auth": {
+          target: env.VITE_API_BASE,
+          changeOrigin: true,
+          secure: false,
         },
       },
     },
