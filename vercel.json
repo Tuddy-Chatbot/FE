@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/chat", "destination": "/api/proxy?path=chat" },
-    { "source": "/auth/:path*", "destination": "/api/proxy?path=auth/:path*" }
+    { "source": "/chat", "destination": "/api/chat" },
+    { "source": "/auth/:path*", "destination": "/api/auth/:path*" }
   ]
 }
