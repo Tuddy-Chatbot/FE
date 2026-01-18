@@ -3,7 +3,7 @@
     { "source": "/chat", "destination": "http://52.79.139.255:8088/chat" },
     {
       "source": "/auth/:path*",
-      "destination": "https://52.79.139.255:8088/auth/:path*"
+      "destination": "http://52.79.139.255:8088/auth/:path*"
     }
   ]
 }
