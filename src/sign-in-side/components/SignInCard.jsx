@@ -54,7 +54,6 @@ export default function SignInCard() {
 
     const isLoggedIn = await confirmLogin(id, password);
     if (isLoggedIn) navigate("/dashboard");
-    
   };
 
   const confirmLogin = async (id, pw) => {
@@ -66,6 +65,11 @@ export default function SignInCard() {
       );
 
       console.log("응답:", res.data);
+
+      const { accessToken, refreshToken } = res.data;
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
       return true;
     } catch (err) {
       console.error(
