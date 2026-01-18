@@ -1,36 +1,40 @@
-import React from 'react';
+import React, { useEffect } from "react";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
-    const handleHello = () => {
-        const botMessage = createChatBotMessage('Hello. Nice to meet you.');
-    
-        setState((prev) => ({
-          ...prev,
-          messages: [...prev.messages, botMessage],
-        }));
-      };
-      
+  const handleHello = () => {
+    const botMessage = createChatBotMessage("Hello. Nice to meet you.");
+
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+  };
+
   const reply = (text) => {
     const botMessage = createChatBotMessage(text);
     setState((prev) => ({ ...prev, messages: [...prev.messages, botMessage] }));
   };
-    
-      // // Put the handleHello function in the actions object to pass to the MessageParser
-      // return (
-      //   <div>
-      //     {React.Children.map(children, (child) => {
-      //       return React.cloneElement(child, {
-      //         actions: {
-      //           handleHello,
-      //         },
-      //       });
-      //     })}
-      //   </div>
-      // );
-      return (
+
+  // 업로드 버튼에서 보내는 메시지를 챗봇에 출력
+  useEffect(() => {
+    const onBotMessage = (e) => {
+      const text = e?.detail?.text;
+      if (!text) return;
+
+      const botMessage = createChatBotMessage(text);
+      setState((prev) => ({ ...prev, messages: [...prev.messages, botMessage] }));
+    };
+
+    window.addEventListener("chatbot:botMessage", onBotMessage);
+    return () => window.removeEventListener("chatbot:botMessage", onBotMessage);
+  }, [createChatBotMessage, setState]);
+
+  return (
     <div>
       {React.Children.map(children, (child) =>
-        React.cloneElement(child, { actions: { handleHello, reply } })
+        React.cloneElement(child, {
+          actions: { handleHello, reply },
+        })
       )}
     </div>
   );

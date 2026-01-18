@@ -14,6 +14,7 @@
 /* 메시지 스크롤 영역 */
 .react-chatbot-kit-chat-message-container {
   height: calc(100% - 120px); /* 헤더/푸터 뺀 나머지 */
+  padding-bottom: 90px; /* 고정 버튼/패널이 메시지를 가리지 않게 여백 */
 }
 
 /* src/chatbot.css */
@@ -28,15 +29,15 @@
 
 /* 봇 말풍선 → 왼쪽 정렬 */
 .react-chatbot-kit-chat-bot-message {
-  margin-left: 40px;        /* 아바타 공간만큼 띄우기 */
-  margin-right: auto;       /* 왼쪽 고정 */
+  margin-left: 40px;         /* 아바타 공간만큼 띄우기 */
+  margin-right: auto;        /* 왼쪽 고정 */
   text-align: left;
   background-color: #e6e6e6; /* 원하면 색상 바꿀 수도 있음 */
 }
 
 /* 유저 말풍선 → 오른쪽 정렬 */
 .react-chatbot-kit-user-chat-message {
-  margin-left: auto;        /* 오른쪽 고정 */
+  margin-left: auto;         /* 오른쪽 고정 */
   margin-right: 20px;
   text-align: right;
   background-color: #2f6fad; /* 유저 말풍선 색 (지금 파랑 유지) */
@@ -45,4 +46,118 @@
 
 .react-chatbot-kit-user-chat-message-arrow {
   border-left: 8px solid #2f6fad; /* 위와 동일한 색상 */
+}
+
+/* =========================================================
+    고정 업로드 버튼 / 진행률 패널 스타일
+   ========================================================= */
+
+/* 챗봇 컨테이너를 기준으로 오버레이 배치 */
+.chatbot-wrapper {
+  position: relative;
+}
+
+/* 버튼: 전송 버튼 위에 고정 */
+.chatbot-fixed-upload {
+  position: absolute;
+  right: 18px;
+  bottom: 78px; /* 전송 버튼 위 */
+
+  /* 텍스트 버튼에 맞게 패딩 기반으로 */
+  padding: 8px 14px;
+  min-height: 36px;
+
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap; /* 줄바꿈 방지 */
+  color: #333;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 20;
+}
+
+.chatbot-fixed-upload:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 진행률 패널: 입력창 위에 고정 */
+.chatbot-upload-panel {
+  position: absolute;
+  right: 18px;
+  bottom: 132px; /* 버튼보다 위 */
+  width: 320px;
+  max-width: calc(100% - 36px);
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+  padding: 10px 12px;
+  z-index: 19;
+}
+
+.chatbot-upload-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  opacity: 0.85;
+}
+
+.chatbot-upload-error {
+  font-size: 12px;
+  color: #c62828;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+}
+
+.chatbot-upload-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 180px;
+  overflow: auto;
+}
+
+.chatbot-upload-item-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.chatbot-upload-filename {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chatbot-upload-pct {
+  width: 44px;
+  text-align: right;
+  opacity: 0.8;
+}
+
+.chatbot-upload-bar {
+  height: 6px;
+  background: #f1f1f1;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.chatbot-upload-bar-fill {
+  height: 100%;
+  background: #5ccc9d; /* 전송 버튼 컬러톤에 맞춤 */
+  width: 0%;
+  transition: width 120ms linear;
 }

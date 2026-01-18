@@ -35,42 +35,31 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
+  const [idError, setIdError] = React.useState(false);
+  const [idErrorMessage, setIdErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
 
   const navigate = useNavigate();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleSubmit = async (event) => {
-    // if (emailError || passwordError) {
-    //   event.preventDefault();
-    //   return;
-    // }
-
     event.preventDefault();
 
-    const { isValid, email, password } = validateInputs();
+    navigate("/dashboard");
+
+    const { isValid, id, password } = validateInputs();
     if (!isValid) return;
 
-    const isLoggedIn = await confirmLogin(email, password);
-    console.log("isasdasd", isLoggedIn);
-    if (isLoggedIn) {
-      navigate("/dashboard");
-    }
+    const isLoggedIn = await confirmLogin(id, password);
+    if (isLoggedIn) navigate("/dashboard");
+    
   };
 
   const confirmLogin = async (id, pw) => {
-    //api test
     try {
       const res = await api.post(
         "/auth/login",
@@ -81,7 +70,6 @@ export default function SignInCard() {
       console.log("응답:", res.data);
       return true;
     } catch (err) {
-      // 서버가 왜 거절했는지 메시지 확인
       console.error(
         "에러:",
         err?.response?.status,
@@ -92,21 +80,29 @@ export default function SignInCard() {
   };
 
   const validateInputs = () => {
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
+    const idEl = document.getElementById("loginId");
+    const passwordEl = document.getElementById("password");
+
+    const id = idEl?.value?.trim() ?? "";
+    const password = passwordEl?.value ?? "";
 
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
+    if (!id) {
+      setIdError(true);
+      setIdErrorMessage("Please enter your ID.");
+      isValid = false;
+    } else if (id.length < 4) {
+      // 원하는 정책에 맞게 조절
+      setIdError(true);
+      setIdErrorMessage("ID must be at least 4 characters long.");
       isValid = false;
     } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
+      setIdError(false);
+      setIdErrorMessage("");
     }
 
-    if (!password.value || password.value.length < 6) {
+    if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage("Password must be at least 6 characters long.");
       isValid = false;
@@ -115,7 +111,7 @@ export default function SignInCard() {
       setPasswordErrorMessage("");
     }
 
-    return { isValid, email: email.value, password: password.value };
+    return { isValid, id, password };
   };
 
   return (
@@ -123,6 +119,7 @@ export default function SignInCard() {
       <Box sx={{ display: { xs: "flex", md: "none" } }}>
         <SitemarkIcon />
       </Box>
+
       <Typography
         component="h1"
         variant="h4"
@@ -130,6 +127,7 @@ export default function SignInCard() {
       >
         Sign in
       </Typography>
+
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -137,22 +135,22 @@ export default function SignInCard() {
         sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}
       >
         <FormControl>
-          <FormLabel htmlFor="email">Email</FormLabel>
+          <FormLabel htmlFor="loginId">ID</FormLabel>
           <TextField
-            error={emailError}
-            helperText={emailErrorMessage}
-            id="email"
-            type="email"
-            name="email"
-            placeholder="example@email.com"
-            autoComplete="email"
+            error={idError}
+            helperText={idErrorMessage}
+            id="loginId"
+            name="loginId"
+            placeholder="your-id"
+            autoComplete="username"
             autoFocus
             required
             fullWidth
             variant="outlined"
-            color={emailError ? "error" : "primary"}
+            color={idError ? "error" : "primary"}
           />
         </FormControl>
+
         <FormControl>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <FormLabel htmlFor="password">Password</FormLabel>
@@ -174,32 +172,32 @@ export default function SignInCard() {
             type="password"
             id="password"
             autoComplete="current-password"
-            autoFocus
             required
             fullWidth
             variant="outlined"
             color={passwordError ? "error" : "primary"}
           />
         </FormControl>
+
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
+
         <ForgotPassword open={open} handleClose={handleClose} />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          onClick={validateInputs}
-        >
+
+        {/* ✅ onClick validateInputs는 사실 없어도 됨 (onSubmit에서 이미 함) */}
+        <Button type="submit" fullWidth variant="contained">
           Sign in
         </Button>
+
         <Typography sx={{ textAlign: "center" }}>
           Don&apos;t have an account?{" "}
           <span>
             <Link
-              href="/material-ui/getting-started/templates/sign-in/"
+              component="button"
               variant="body2"
+              onClick={() => navigate("/signup")}
               sx={{ alignSelf: "center" }}
             >
               Sign up
@@ -207,6 +205,7 @@ export default function SignInCard() {
           </span>
         </Typography>
       </Box>
+
       <Divider>or</Divider>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Button

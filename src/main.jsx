@@ -7,6 +7,7 @@ import App from './App';
 import theme from './theme';
 import Dashboard from './dashboard/Dashboard';
 import SignInSide from './sign-in-side/SignInSide';
+import SignUp from './sign-up/SignUp';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
@@ -20,6 +21,7 @@ root.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SignInSide />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
