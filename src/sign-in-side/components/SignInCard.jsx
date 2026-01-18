@@ -49,8 +49,6 @@ export default function SignInCard() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    navigate("/dashboard");
-
     const { isValid, id, password } = validateInputs();
     if (!isValid) return;
 
