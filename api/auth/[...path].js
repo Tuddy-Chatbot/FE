@@ -1,7 +1,12 @@
 export default async function handler(req, res) {
-  const targetUrl = "http://52.79.139.255:8088/chat";
+  const BACKEND_BASE = "http://52.79.139.255:8088";
 
   try {
+    // /api/auth/login -> /auth/login
+    const url = new URL(req.url, "http://localhost");
+    const backendPath = url.pathname.replace(/^\/api\/auth/, "/auth");
+    const targetUrl = `${BACKEND_BASE}${backendPath}${url.search || ""}`;
+
     const auth = req.headers.authorization || req.headers.Authorization;
 
     const headers = {
@@ -33,6 +38,8 @@ export default async function handler(req, res) {
       res.send(text);
     }
   } catch (e) {
-    res.status(502).json({ message: "Chat proxy error", error: String(e) });
+    res
+      .status(502)
+      .json({ message: "Auth proxy error", error: String(e) });
   }
 }
