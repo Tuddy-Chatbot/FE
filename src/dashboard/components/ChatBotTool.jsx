@@ -1,19 +1,16 @@
 import React, { useRef, useState } from "react";
 import Chatbot from "react-chatbot-kit";
-import axios from "axios";
+import axios from "axios"; // S3 업로드용 (raw axios)
+
+// [핵심 수정] 직접 생성하던 api 코드를 삭제하고, lib/api에서 가져옵니다.
+// 이 api 인스턴스는 토큰을 자동으로 헤더에 넣어줍니다.
+import api from "../../lib/api"; 
 
 import config from "../../bot/config";
 import MessageParser from "../../bot/MessageParser";
 import ActionProvider from "../../bot/ActionProvider";
 import "react-chatbot-kit/build/main.css";
 import "../../chatbot.css";
-
-// 프로젝트에 이미 api 인스턴스가 있으면 그걸 쓰는 게 더 좋음
-// 예) import api from "../../lib/api";
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE,
-  withCredentials: false,
-});
 
 export default function ChatBotTool() {
   const botRef = useRef(null);
@@ -34,12 +31,17 @@ export default function ChatBotTool() {
       contentType: file.type || "application/octet-stream",
       contentLength: file.size,
     };
+    
+    // api 인스턴스를 사용하므로 'Authorization: Bearer 토큰'이 자동으로 포함됨
+    // /s3/put -> api/proxy.js -> 백엔드
     const { data } = await api.post("/s3/put", body);
     // 예상: { url: "...", fileId: 10 }
     return data;
   };
 
   const uploadToS3 = async (url, file) => {
+    // [주의] S3로 직접 업로드할 때는 토큰이 들어간 'api'가 아니라 쌩 'axios'를 써야 함
+    // (AWS는 우리의 Bearer 토큰을 모름)
     await axios.put(url, file, {
       headers: { "Content-Type": file.type || "application/octet-stream" },
       onUploadProgress: (evt) => {
@@ -51,6 +53,7 @@ export default function ChatBotTool() {
   };
 
   const notifyProcess = async (fileId) => {
+    // 이것도 백엔드 요청이므로 'api' 사용
     await api.post(`/files/${fileId}/process`);
   };
 
@@ -66,9 +69,12 @@ export default function ChatBotTool() {
 
       for (const file of files) {
         const { url, fileId } = await requestPresignedUrl(file);
+        
+        // S3 업로드
         await uploadToS3(url, file);
 
         if (fileId != null) {
+          // 처리 요청
           await notifyProcess(fileId);
         }
 
