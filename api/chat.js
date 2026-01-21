@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // 백엔드 주소 (하드코딩)
+  // 백엔드 주소
   const targetUrl = "http://52.79.139.255:8088/chat";
 
   // 1. CORS Preflight (OPTIONS) 처리
@@ -9,19 +9,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 2. 요청 헤더 클린업 (500 에러 방지 핵심)
-    // 브라우저 헤더 중 프록시 통신에 충돌을 일으키는 헤더들 제거
+    // 2. 요청 헤더 클린업 (500 에러 및 충돌 방지)
     const headers = { ...req.headers };
     
+    // 프록시 통신에 방해되는 헤더들 제거
     const dropHeaders = [
       "host",
       "content-length",
-      "content-encoding", // 이미 디코딩된 데이터를 또 압축 해제하려다 500 에러 발생 방지
+      "content-encoding", 
       "connection",
       "keep-alive",
       "transfer-encoding",
       "te",
-      "upgrade"
+      "upgrade",
+      "content-type" // fetch가 자동으로 설정하도록 제거 (중요)
     ];
 
     dropHeaders.forEach((key) => delete headers[key]);
@@ -32,17 +33,26 @@ export default async function handler(req, res) {
       headers.authorization = auth;
     }
 
-    // 컨텐츠 타입은 JSON으로 고정
-    headers["content-type"] = "application/json";
-
-    // 3. 요청 바디 구성
+    // 3. 바디 변환 (JSON -> Form Data)
+    // 백엔드가 application/json을 지원하지 않으므로, 
+    // 표준 폼 데이터(application/x-www-form-urlencoded)로 변환하여 전송합니다.
     let body;
     if (req.method !== "GET" && req.method !== "HEAD") {
-      // req.body가 객체면 문자열화, 없으면 빈 객체 {}
-      body = JSON.stringify(req.body ?? {});
+      const params = new URLSearchParams();
+      const data = req.body || {};
+      
+      // 데이터 객체를 순회하며 Form Data로 변환
+      for (const key in data) {
+        const value = data[key];
+        // 객체나 배열인 경우 문자열로 변환하여 전송
+        const paramValue = typeof value === 'object' ? JSON.stringify(value) : value;
+        params.append(key, paramValue);
+      }
+      body = params;
     }
 
     // 4. 백엔드로 요청 전달
+    // body가 URLSearchParams이면 Content-Type은 자동으로 form-urlencoded가 됩니다.
     const upstream = await fetch(targetUrl, {
       method: req.method,
       headers,
